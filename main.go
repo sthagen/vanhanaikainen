@@ -7,7 +7,6 @@ import (
         "log"
         "net/http"
         "os"
-        "os/exec"
         "path/filepath"
         "time"
 )
@@ -133,7 +132,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
                 h_xml_src := fmt.Sprintf("%x", h.Sum(nil))
                 h_name := fmt.Sprintf("https://example.com/downloads/app/svg/%s.svg", h_xml_src)
 
-                fmt.Println("incoming: sha256:%s<-(%s)", h_xml_src, xml_src)
+                fmt.Printf("incoming: sha256:%s<-(%s)\n", h_xml_src, xml_src)
                 fmt.Printf("Upload of (%s) successful; SVG promised at(%s)", xml_src, h_name)
 
                 fmt.Fprintf(w, "<p>Upload successful, resulting SVG soon at <a href=\"%s\">%s</a></p>", h_name, h_name)
