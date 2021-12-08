@@ -76,6 +76,8 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		filetype := http.DetectContentType(buff)
+        src_ext := filepath.Ext(fileHeader.Filename)
+        fmt.Printf("detected: mime/type(%s) and extension(%s)\n", filetype, src_ext)
 		if filetype != "text/xml; charset=utf-8" {
 			message := fmt.Sprintf("The provided file format (%s) is not allowed. Please upload only xml files for now", filetype)
 			http.Error(w, message, http.StatusBadRequest)
@@ -95,8 +97,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		name_part := time.Now().UnixNano()
-		xml_ext := filepath.Ext(fileHeader.Filename)
-		xml_path := fmt.Sprintf("./incoming/%d%s", name_part, xml_ext)
+		xml_path := fmt.Sprintf("./incoming/%d%s", name_part, src_ext)
 		f, err := os.Create(xml_path)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -114,7 +115,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		xml_src := fmt.Sprintf("./incoming/%d%s", name_part, xml_ext)
+		xml_src := fmt.Sprintf("./incoming/%d%s", name_part, src_ext)
 
 		f, err = os.Open(xml_src)
 		if err != nil {
