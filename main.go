@@ -54,9 +54,6 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	// get a reference to the fileHeaders
 	files := r.MultipartForm.File["file"]
 
-	name_part := time.Now().UnixNano()
-	xml_ext := ""
-	xml_path := ""
 	for _, fileHeader := range files {
 		if fileHeader.Size > MAX_UPLOAD_SIZE {
 			http.Error(w, fmt.Sprintf("The source file is too big: %s. Please use files with less than 1MB in size", fileHeader.Filename), http.StatusBadRequest)
@@ -91,15 +88,15 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = os.MkdirAll("./uploads", os.ModePerm)
+		err = os.MkdirAll("./incoming", os.ModePerm)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		name_part = time.Now().UnixNano()
-		xml_ext = filepath.Ext(fileHeader.Filename)
-		xml_path = fmt.Sprintf("./incoming/%d%s", name_part, xml_ext)
+		name_part := time.Now().UnixNano()
+		xml_ext := filepath.Ext(fileHeader.Filename)
+		xml_path := fmt.Sprintf("./incoming/%d%s", name_part, xml_ext)
 		f, err := os.Create(xml_path)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -142,16 +139,17 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	// Prelude
-	err := os.Mkdir("incoming", 0755)
+	err := os.MkdirAll("incoming", os.ModePerm)
 	if err != nil && !os.IsExist(err) {
 		log.Fatal(err)
 	}
 	fmt.Printf("OK - incoming folder exists\n")
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", IndexHandler)
 	mux.HandleFunc("/incoming", uploadHandler)
 
-	fmt.Printf("starting server on port 1234 ...\n")
+	fmt.Printf("Server running on port 1234 ...\n")
 	if err := http.ListenAndServe(":1234", mux); err != nil {
 		log.Fatal(err)
 	}
