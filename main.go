@@ -27,7 +27,7 @@ func (pr *Progress) Write(p []byte) (n int, err error) {
 
 func (pr *Progress) Print() {
 	if pr.BytesRead == pr.TotalSize {
-		fmt.Println("DONE!")
+		fmt.Println("File upload complete.")
 		return
 	}
 
@@ -133,7 +133,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		h_name := fmt.Sprintf("https://example.com/downloads/app/svg/%s.svg", h_xml_src)
 
 		fmt.Printf("incoming: sha256:%s<-(%s)\n", h_xml_src, xml_src)
-		fmt.Printf("Upload of (%s) successful; SVG promised at(%s)", xml_src, h_name)
+		fmt.Printf("Upload of (%s) successful; SVG promised at(%s)\n", xml_src, h_name)
 
 		fmt.Fprintf(w, "<p>Upload successful, resulting SVG soon at <a href=\"%s\">%s</a></p>", h_name, h_name)
 
@@ -141,10 +141,17 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Prelude
+	err := os.Mkdir("incoming", 0755)
+	if err != nil && !os.IsExist(err) {
+		log.Fatal(err)
+	}
+	fmt.Printf("OK - incoming folder exists\n")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", IndexHandler)
 	mux.HandleFunc("/incoming", uploadHandler)
 
+	fmt.Printf("starting server on port 1234 ...\n")
 	if err := http.ListenAndServe(":1234", mux); err != nil {
 		log.Fatal(err)
 	}
