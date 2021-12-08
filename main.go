@@ -118,34 +118,27 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
                         http.Error(w, err.Error(), http.StatusBadRequest)
                         return
                 }
+                xml_src := fmt.Sprintf("./incoming/%d%s", name_part, xml_ext)
+
+                f, err = os.Open(xml_src)
+                if err != nil {
+                        log.Fatal(err)
+                }
+                defer f.Close()
+
+                h := sha256.New()
+                if _, err := io.Copy(h, f); err != nil {
+                        log.Fatal(err)
+                }
+                h_xml_src := fmt.Sprintf("%x", h.Sum(nil))
+                h_name := fmt.Sprintf("https://example.com/downloads/app/svg/%s.svg", h_xml_src)
+
+                fmt.Println("incoming: sha256:%s<-(%s)", h_xml_src, xml_src)
+                fmt.Printf("Upload of (%s) successful; SVG promised at(%s)", xml_src, h_name)
+
+                fmt.Fprintf(w, "<p>Upload successful, resulting SVG soon at <a href=\"%s\">%s</a></p>", h_name, h_name)
+
         }
-
-        xml_src := fmt.Sprintf("./incoming/%d%s", name_part, xml_ext)
-        f, err := os.Open(xml_src)
-        if err != nil {
-                log.Fatal(err)
-        }
-        defer f.Close()
-
-        h := sha256.New()
-        if _, err := io.Copy(h, f); err != nil {
-                log.Fatal(err)
-        }
-
-        h_name := fmt.Sprintf("https://example.com/downloads/app/svg/%x.svg", h.Sum(nil))
-
-        args := []string{uml_src}
-        fmt.Printf("%v\n", args)
-        shashellOut, err := exec.Command("sha256sum", args...).CombinedOutput()
-        if err != nil {
-                fmt.Println(err)
-                panic(err)
-        }
-        fmt.Print("shashelljob: ")
-        fmt.Println(string(shashellOut))
-
-        fmt.Fprintf(w, "<p>Upload successful, your SVG should appear soon at <a href=\"%s\">%s</a></p>", h_name, h_name)
-        fmt.Printf("Upload of (%s) successful; SVG promised at(%s)", xml_src, h_name)
 }
 
 
