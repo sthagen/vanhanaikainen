@@ -4,12 +4,6 @@ Oldfashioned (Finnish: vanhanaikainen) source processing service dispatch implem
 
 [License: MIT](https://git.sr.ht/~sthagen/vanhanaikainen/tree/default/item/LICENSE)
 
-[![version](https://img.shields.io/pypi/v/vanhanaikainen.svg?style=flat)](https://pypi.python.org/pypi/vanhanaikainen/)
-[![downloads](https://img.shields.io/pypi/dm/vanhanaikainen.svg?style=flat)](https://pypi.python.org/pypi/vanhanaikainen/)
-[![wheel](https://img.shields.io/pypi/wheel/vanhanaikainen.svg?style=flat)](https://pypi.python.org/pypi/vanhanaikainen/)
-[![supported-versions](https://img.shields.io/pypi/pyversions/vanhanaikainen.svg?style=flat)](https://pypi.python.org/pypi/vanhanaikainen/)
-[![supported-implementations](https://img.shields.io/pypi/implementation/vanhanaikainen.svg?style=flat)](https://pypi.python.org/pypi/vanhanaikainen/)
-
 ## Documentation
 
 User and developer [documentation of vanhanaikainen](https://codes.dilettant.life/docs/vanhanaikainen).
