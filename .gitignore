@@ -15,3 +15,6 @@
 # vendor/
 vanhanaikainen
 incoming/
+.python-version
+local_*
+site/
