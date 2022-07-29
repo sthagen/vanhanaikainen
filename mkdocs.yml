@@ -27,8 +27,6 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://git.sr.ht/~sthagen/vanhanaikainen
-    - icon: fontawesome/brands/python
-      link: https://pypi.org/project/vanhanaikainen
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/shage
 
